@@ -1,4 +1,5 @@
 #include "Tag.h"
+#pragma once 
 
 std::string Tag::getOpenTag() const {
     return openTag;

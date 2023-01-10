@@ -1,17 +1,17 @@
+#pragma once
 #include "Parser.h"
 #include <string>
 #include <algorithm>
-#include <fstream>
+// #include <fstream>
 #include <chrono>
 #include <ctime>
 #include "..\Tag\Tag.cpp"
 #include "..\Validator\Validation.cpp"
+#include "..\Evaluator\Evaluator.cpp"
 
 //here you read and parse the file string 
 
-
-
-std::string extractParam(std::string expr, std::string startElem, char end){
+std::string Parser::extractParam(std::string expr, std::string startElem, char end){
 
     unsigned start = expr.find(startElem);
     if (start > expr.size())
@@ -29,7 +29,7 @@ std::string extractParam(std::string expr, std::string startElem, char end){
     return res;
 }
 
-bool hasParameter(std::string expr){
+bool Parser::hasParameter(std::string expr){
     for (size_t i = 0; i < expr.size(); i++)
     {
         if (expr[i] == '"')
@@ -40,10 +40,10 @@ bool hasParameter(std::string expr){
     return false;
 }
 
-void parseTagFromFile(std::ifstream& in) //first this, its easier
+void Parser::parseTagFromFile(std::ifstream& in) //first this, its easier
 {
     std::string myString;
-    std::ofstream errorLogger("errors.txt");
+    std::ofstream errorLogger("../errors.txt");
     auto currTime = std::chrono::system_clock::now();
     std::time_t time = std::chrono::system_clock::to_time_t(currTime);
     
@@ -112,17 +112,31 @@ void parseTagFromFile(std::ifstream& in) //first this, its easier
     in.close();
 }
 
-
+//НЯМА КАК ДА РАБОТИ!!!
 void Parser::writeIntoFile(const char* _fileName, std::ofstream& out){
-    std::cout << "Maria e MNOGO PROSTA";
+    // std::cout << "Maria e MNOGO PROSTA";
+    Tag t;
+    Evaluator e;
+    e.evaluate_expression(t);
+    out.open(_fileName);
+    if(!out){
+        std::cout << "Maria e MNOGO PROSTA  !error!";
+    }
+    out << "mimi";
+    out << t.getData();
+
 }
 
 
 
 int main(){
+    Parser p;
 
     std::ifstream in("example_input.txt");
+    p.parseTagFromFile(in);
 
-    parseTagFromFile(in);
+    // std::ofstream out;
+    // p.writeIntoFile("example_output.txt", out);
+
     return 0;
 }

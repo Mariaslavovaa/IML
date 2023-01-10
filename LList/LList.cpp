@@ -1,5 +1,6 @@
-#include <iostream>
 #include "LList.h"
+#pragma once
+
 
 template<typename T>
 void LList<T>::copy(const LList<T>& other){
@@ -52,7 +53,7 @@ LList<T>::~LList(){
 }
 
 template <typename T>
-LList<T>::Node* LList<T>::getFirst() const { 
+typename LList<T>::Node* LList<T>::getFirst() const { 
     return first;
 }
 
@@ -100,7 +101,7 @@ inline void LList<T>::map_multiple(double n){
 }
 
 template<typename T>
-inline double LList<T>::agg_sumary(){
+inline double LList<T>::agg_summation(){
     double sum = 0;
     Node* temp = first;
     if(temp == nullptr){
@@ -233,7 +234,7 @@ inline void LList<T>::remove_duplicates(){  // 1 1 2 3 4 4   => 1 2 3 4
 }
 
 template<typename T>
-void LList<T>::print(){
+inline void LList<T>::print(){
     if(first == nullptr){
         return;
     }
@@ -246,28 +247,42 @@ void LList<T>::print(){
     }
 }
 
+template<typename T>
+inline void LList<T>::printFile(std::ofstream& out){
+    if(first == nullptr){
+        return;
+    }
 
-int main(){
-
-    LList<double> list;
-    list.push_back(1);   
-    list.push_back(2);   
-    list.push_back(2);   
-    list.push_back(4);   
-    list.push_back(5);
-    list.push_back(5);
-    list.push_back(5);
-
-    // list.remove_duplicates();
-    list.srt_slc(2);
-    list.print();
-
-    // std::string op = "abab";
-    // op.erase(op.find('b'), op.find('b'));
-    // std::cout << op;
-
-    // std::cout << list.agg_first() << "  ";
-    // list.map_multiple(2);
-    // std::cout << list.agg_last();   
-    // std::cout << list.agg_last();   
+    Node* curr = first;
+    while (curr != nullptr)
+    {
+        out << curr->data << " ";
+        curr = curr->next;
+    }
 }
+
+
+// int main(){
+
+//     LList<double> list;
+//     list.push_back(1);   
+//     list.push_back(2);   
+//     list.push_back(2);   
+//     list.push_back(4);   
+//     list.push_back(5);
+//     list.push_back(5);
+//     list.push_back(5);
+
+//     // list.remove_duplicates();
+//     // list.srt_slc(2);
+//     list.print();
+
+//     // std::string op = "abab";
+//     // op.erase(op.find('b'), op.find('b'));
+//     // std::cout << op;
+
+//     // std::cout << list.agg_first() << "  ";
+//     // list.map_multiple(2);
+//     // std::cout << list.agg_last();   
+//     // std::cout << list.agg_last();   
+// }

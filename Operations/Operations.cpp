@@ -16,7 +16,7 @@ void Operations::map_mlt(LList<double>& t, double n){
 void Operations::agg_sum(LList<double>& t){
     LList<double> newList;
     //change name
-    double element = t.agg_sumary();
+    double element = t.agg_summation();
     newList.push_back(element);
 }
 

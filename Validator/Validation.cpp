@@ -2,6 +2,7 @@
 #include <stack>
 #include <algorithm>
 #include <iostream>
+#pragma once
 
 
 bool Validation::rightBrackets(const std::string& expression) {

@@ -35,7 +35,7 @@ class LList{
     inline void map_increment(double n);
     inline void map_multiple(double n);
 
-    inline double agg_sumary();
+    inline double agg_summation();
     inline double agg_product();
     inline double agg_average();
     inline T agg_first();
@@ -51,5 +51,6 @@ class LList{
     //dst // ДА ГО ОПРАВЯ АКО МОГА
     inline void remove_duplicates();
 
-    void print();
+    inline void print();
+    inline void printFile(std::ofstream& out);
 };
