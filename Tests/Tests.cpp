@@ -114,7 +114,7 @@ TEST_CASE("testing list map multiply")
     sndList.push_back(6);
     sndList.push_back(2);
 
-    list.map_multiple(2);
+    list.map_multiply(2);
 
     CHECK(list == sndList);
 }
