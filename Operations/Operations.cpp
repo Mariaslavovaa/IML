@@ -7,7 +7,7 @@ inline void Operations::map_inc(LList<double>& list,const double number){
 }
 
 inline void Operations::map_mlt(LList<double>& list,const double number){
-    list.map_multiple(number);
+    list.map_multiply(number);
 }
 
 //AGG

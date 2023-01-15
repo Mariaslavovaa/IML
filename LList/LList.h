@@ -30,13 +30,15 @@ class LList{
     inline LList<T>& operator=(const LList<T>& other);
     inline ~LList();
 
+    inline bool operator==(LList<T> other);
+
     inline Node* getFirst() const;
 
     inline void push_back(const T& elem);
     inline void push_front(const T& data);
 
     inline void map_increment(const double& number);
-    inline void map_multiple(const double& number);
+    inline void map_multiply(const double& number);
 
     inline double agg_summation();
     inline double agg_product();
@@ -53,6 +55,7 @@ class LList{
     inline void remove_duplicates();
 
     inline void print();
+    inline unsigned size();
     inline void printFile(std::ofstream& out);
 
     class Iterator

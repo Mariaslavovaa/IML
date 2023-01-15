@@ -32,7 +32,7 @@ class Processor{
         }
 };
 
-int main(){
-    Processor p;
-    p.process("example_input.txt", "result.txt");
-}
+// int main(){
+//     Processor p;
+//     p.process("example_input.txt", "result.txt");
+// }

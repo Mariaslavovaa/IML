@@ -139,7 +139,7 @@ inline void LList<T>::map_increment(const double& number){
 }
 
 template<typename T>
-inline void LList<T>::map_multiple(const double& number){
+inline void LList<T>::map_multiply(const double& number){
     Node* temp = first;
     if(temp == nullptr){
         return;
@@ -262,6 +262,36 @@ typename LList<T>::Node* LList<T>::merge_sort(Node* head)
     Node *c = merge(a, b);
     
     return c;
+}
+template <typename T>
+inline unsigned  LList<T>::size(){
+    Node* tmp = this->first;
+    unsigned counter = 0; 
+    while (tmp)
+    {
+        counter++;
+        tmp = tmp->next;
+    }
+    return counter;
+}
+template <typename T>
+inline bool LList<T>::operator==(LList<T> other){
+    if (this->size() != other.size())
+    {
+        return false;
+    }
+    
+    Node* tmp = this->first, *sndTmp = other.getFirst();
+    while (tmp && sndTmp)
+    {
+        if(tmp->data != sndTmp->data){
+            return false;
+        }
+        tmp = tmp->next;
+        sndTmp = sndTmp->next;
+    }
+    return true;
+    
 }
 
 //sort??? heap/merge????
@@ -399,14 +429,31 @@ typename LList<T>::Iterator& LList<T>::Iterator::operator++()
 //     list.push_back(5);
 //     list.push_back(3);
 //     list.push_back(0);
-//     list.print();
+    
+//     list.reverse();
+    
+//     std::cout << "majka ti prosta\n";
+
+//     LList<double> list2;
+//     list2.push_back(1);   
+//     list2.push_back(8);   
+//     list2.push_back(2);   
+//     list2.push_back(4);   
+//     list2.push_back(5);
+//     list2.push_back(3);
+//     list2.push_back(0);
+//     list2.reverse();
+//     std::cout << "majka ti tupa\n";
+
+//     std::cout << "kuche na islqma" << std::endl;
+//     std::cout << (list == list2) << std::endl;
 
 
 //     // LList<double> merge(list.merge_sort(list.getFirst()));
 //     // merge.print();
 
-//     list.srt_ord("ASC");
-//     list.print();
+//     //list.srt_ord("ASC");
+//     //list.print();
 
 //     // list.remove_duplicates();
 //     // list.srt_slc(2);
