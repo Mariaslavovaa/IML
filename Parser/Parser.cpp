@@ -6,6 +6,7 @@
 #include "..\Tag\Tag.cpp"
 #include "..\Validator\Validator.cpp"
 #include "..\Evaluator\Evaluator.cpp"
+#include "../Constants/Constants.cpp"
 
 //here you read and parse the file string 
 
@@ -38,23 +39,28 @@ inline bool Parser::hasParameter(const std::string expr){
     return false;
 }
 
-inline std::vector<Tag> Parser::parseTagFromFile(const char* file) 
-{   
-    std::ifstream in(file);
-    std::string myString;
+inline void Parser::logError(std::string errorMsg){
+    Constants c;
     std::ofstream errorLogger;
-    errorLogger.open("errors.txt", std::ios::app);
+    errorLogger.open(c.errorLoggingFilePath, std::ios::app);
     auto currTime = std::chrono::system_clock::now();
     std::time_t time = std::chrono::system_clock::to_time_t(currTime);
     
-    errorLogger  << std::ctime(&time) << "Errors history\n";
+    errorLogger  << std::ctime(&time) << errorMsg << std::endl;
+    errorLogger.close();
+}
+
+inline std::vector<Tag> Parser::parseTagFromFile(const char* file) 
+{   
+    Constants c;
+    std::ifstream in(file);
+    std::string myString;
     std::vector<Tag> result;
     
         while (!in.eof())
         {
             Tag tag;
             std::getline(in, myString);
-            std::cout << "All string: " << myString << std::endl;
             Validator valid;
             std::string parameter = "";
             if(hasParameter(myString)){
@@ -64,42 +70,31 @@ inline std::vector<Tag> Parser::parseTagFromFile(const char* file)
                 myString.erase(std::remove(myString.begin(), myString.end(), '"'), myString.end());
             }
 
-            //tag.opentag = <MAP-INC>
             std::string openTag = extractParam(myString, "<", '>');
             openTag.erase(std::remove(openTag.begin(), openTag.end(), ' '), openTag.end());
             if(valid.validateOpenTag(openTag)){
                 tag.setOpenTag(openTag);
             } else {
-                auto currTime = std::chrono::system_clock::now();
-                time = std::chrono::system_clock::to_time_t(currTime);
-                errorLogger << std::ctime(&time) << "Invalid open tag!\n";
+                logError(c.invalidOpenTagError);
                 continue;
             }
-            std::cout << "Open tag: " << openTag << std::endl;
-
 
             //parameter
             if (parameter!="")
             {
                 if(!valid.operRequiresParam(openTag)){
-                    auto currTime = std::chrono::system_clock::now();
-                    time = std::chrono::system_clock::to_time_t(currTime);
-                    errorLogger  << std::ctime(&time) << "This operation must have no parameter!\n" << parameter << "\n";
+                    logError(c.mushHaveNoParamError);
                     continue;
                 }
                 if (valid.validateParameter(parameter)) {
                     tag.setParameter(parameter);
                 } else {
-                    auto currTime = std::chrono::system_clock::now();
-                    time = std::chrono::system_clock::to_time_t(currTime);
-                    errorLogger  << std::ctime(&time) << "Invalid parameter!\n" << parameter << "\n";
+                    logError(c.invalidParamError);
                     continue;
                 }
             } else {
                 if(valid.operRequiresParam(openTag)){
-                    auto currTime = std::chrono::system_clock::now();
-                    time = std::chrono::system_clock::to_time_t(currTime);
-                    errorLogger  << std::ctime(&time) << "This operation must have parameter!\n" << parameter << "\n";
+                    logError(c.mushHaveParamError);
                     continue;
                 }
             }
@@ -109,38 +104,25 @@ inline std::vector<Tag> Parser::parseTagFromFile(const char* file)
             if(valid.validateCloseTag(closeTag, openTag)){
                 tag.setCloseTag(closeTag);
             } else {
-                auto currTime = std::chrono::system_clock::now();
-                time = std::chrono::system_clock::to_time_t(currTime);
-                errorLogger << std::ctime(&time) << "Invalid close tag!\n";
+                logError(c.invalidCloseTagError);
                 continue;
             }
-            std::cout << "Close tag: " << closeTag << std::endl;
 
-
-            //tag.data = "1 2 3"
             std::string data = extractParam(myString, ">", '<');
             if(data.size() > 0){
                 if(valid.validateData(data)){
                     tag.setData(data);
                 } else {
-                    auto currTime = std::chrono::system_clock::now();
-                    time = std::chrono::system_clock::to_time_t(currTime);
-                    errorLogger << std::ctime(&time) << "Invalid data!\n";
+                    logError(c.invalidDataError);
                     continue;
                 }
             }
             else {
-                auto currTime = std::chrono::system_clock::now();
-                time = std::chrono::system_clock::to_time_t(currTime);
-                errorLogger << std::ctime(&time) << "No data found!\n";
+                logError(c.noDataError);
                 continue;
             }
-            
-            std::cout << "Data: " << data << std::endl;
-
             result.push_back(tag);
         }
-        
     in.close();
     return result;
 }
@@ -150,7 +132,7 @@ inline void Parser::writeIntoFile(const char* _fileName, LList<double> list){
     out.open(_fileName,std::ios_base::app);
     if(!out){
         out.close();
-        out.open("../errors.txt");
+        out.open("errors.txt", std::ios::app);
         out << "Invalid output file!\n";
         out.close();
     }

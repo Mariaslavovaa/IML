@@ -12,6 +12,7 @@ class Parser{
     private:
         inline std::string extractParam(const std::string expr, const std::string startElem, const char end);
         inline bool hasParameter(const std::string expr);
+        inline void logError(std::string errorMsg);
 
     public:
         inline std::vector<Tag> parseTagFromFile(const char* file);
