@@ -76,7 +76,17 @@
     "typeinfo": "cpp",
     "chrono": "cpp",
     "ctime": "cpp",
-    "ratio": "cpp"
+    "ratio": "cpp",
+    "stack": "cpp",
+    "list": "cpp",
+    "condition_variable": "cpp",
+    "csignal": "cpp",
+    "unordered_set": "cpp",
+    "map": "cpp",
+    "set": "cpp",
+    "iomanip": "cpp",
+    "mutex": "cpp",
+    "thread": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }

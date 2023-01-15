@@ -1,11 +1,12 @@
-#include "Validation.h"
+#include "Validator.h"
 #include <stack>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 #pragma once
 
 
-bool Validation::rightBrackets(const std::string& expression) {
+inline bool Validator::rightBrackets(const std::string& expression) {
     std::stack<char> brackets;
 
     if(std::count(expression.begin(), expression.end(), '<') != 1 &&
@@ -29,8 +30,7 @@ bool Validation::rightBrackets(const std::string& expression) {
     return brackets.empty();
 }
 
-
-bool Validation::checkOperation(std::string operation){
+inline bool Validator::checkOperation(const std::string& operation){
     if (operation == "MAP-INC") {
         return true;
     } else if(operation == "MAP-MLT") {
@@ -59,72 +59,95 @@ bool Validation::checkOperation(std::string operation){
 }
 
 // extract into external private method extractOpenTagOperation, extractCloseTagOperation
-std::string Validation::extractOpenTagOperation(std::string openTag){
+inline std::string Validator::extractOpenTagOperation(std::string& openTag){
+
     std::string openTagOperation = openTag.erase(openTag.find('<'), openTag.find('<'));
     openTagOperation= openTag.erase(openTag.find('>'), openTag.find('>')); 
     return openTagOperation;
 }
 
-std::string Validation::extractCloseTagOperation(std::string closeTag){
+inline std::string Validator::extractCloseTagOperation(std::string& closeTag){
 
     std::string closeTagOperation = closeTag.erase(closeTag.find('<'), closeTag.find('<') + 1);
     closeTagOperation= closeTag.erase(closeTag.find('>'), closeTag.find('>'));
     return closeTagOperation;
 }
 
-bool Validation::validateOpenTag(std::string openTag){
-    // if (!this->rightBrackets(openTag))
-    // {
-    //     return false;
-    // }
-    // std::string operation = extractOpenTagOperation(openTag);
-    // return checkOperation(operation) == true;
-
+inline bool Validator::validateOpenTag(const std::string& openTag){
     return this->checkOperation(openTag);
 }
 
-bool Validation::validateCloseTag(std::string closeTag, std::string openTag){
-    // if (!this->rightBrackets(closeTag) || closeTag[closeTag.find('<') + 1] != '/')
-    // {
-    //     return false;
-    // }
-    // std::string openTagOperation = extractOpenTagOperation(openTag);
-    // std::string closeTagOperation = extractCloseTagOperation(closeTag);
-    // return checkOperation(closeTagOperation) == true && openTagOperation == closeTagOperation;
-
+inline bool Validator::validateCloseTag(const std::string& closeTag, const std::string& openTag){
     return this->checkOperation(openTag) && this->checkOperation(closeTag) && closeTag == openTag;
 }
 
-bool Validation::validateParameter(std::string parameter){
+inline bool Validator::validateParameter(const std::string& parameter){  //-2.2
     if (parameter == "ASC" || parameter == "DSC")
     {
         return true;
     }
-    // //stoi?   stod
-    // try
-    // {
-    //     int param = std::stoi(parameter);
-    // }
-    // catch(const std::invalid_argument& e)
-    // {
-    //     // errorLogger  << std::ctime(&time) << "Invalid parameter!\n" << parameter << "\n";
-    // }
-    
-    for (size_t i = 0; i < parameter.size(); i++)
+
+    size_t count = 0;
+    for (size_t i = 0; i < parameter.size(); i++){  /// -12.5
+        if(parameter[i] == '.'){
+            count++;
+        }
+        if (i == 0 && parameter[i] == '-')
+        {
+            continue;
+        }
+        
+        if (parameter[i] != '.')
+        {
+            if(!(parameter[i] >= '0' && parameter[i] <= '9')){
+                return false;
+            }
+        }
+        
+    }
+    return true;
+}
+
+inline bool Validator::validateData(const std::string& data){
+
+    for (size_t i = 0; i < data.size(); i++)
     {
-        if(parameter[i] < '0' || parameter[i] > '9'){
+        if(data[i] == ' '){
+            continue;
+        }
+        if(data[i] < '0' || data[i] > '9'){
             return false;
         } 
     }
     return true; 
 }
 
+inline bool Validator::operRequiresParam(const std::string& operation){
+    if (operation == "MAP-INC") {
+        return true;
+    } else if(operation == "MAP-MLT") {
+        return true;
+    } else if(operation == "SRT-ORD") {
+        return true;
+    } else if(operation == "SRT-SLC") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
 
 // int main(){
 
-//     Validation val;
-//     std::cout << std::boolalpha << val.validateOpenTag("MAP-MLT ") << std::endl;
-//     std::cout << std::boolalpha << val.validateParameter("2") << std::endl;
+//     Validator val;
+//     // std::cout << std::boolalpha << val.validateOpenTag("MAP-MLT ") << std::endl;
+//     // std::cout << std::boolalpha << val.validateParameter("2") << std::endl;
+//     // std::cout << val.removeSpaces("1 2 3") << std::endl;
+//     // std::string s = val.removeSpaces("1 2 3");
+//     std::cout << std::boolalpha << val.validateParameter("1300008") << std::endl;
+
 
 //     return 0;
 // }

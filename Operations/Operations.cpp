@@ -1,62 +1,64 @@
 #pragma once
 #include "Operations.h"
 
-
-
 //MAP
-void Operations::map_inc(LList<double>& t, double n){
-    t.map_increment(n);
+inline void Operations::map_inc(LList<double>& list,const double number){
+    list.map_increment(number);
 }
 
-void Operations::map_mlt(LList<double>& t, double n){
-    t.map_multiple(n);
+inline void Operations::map_mlt(LList<double>& list,const double number){
+    list.map_multiple(number);
 }
 
 //AGG
-void Operations::agg_sum(LList<double>& t){
+inline void Operations::agg_sum(LList<double>& list){
     LList<double> newList;
-    //change name
-    double element = t.agg_summation();
+    double element = list.agg_summation();
     newList.push_back(element);
+    list = newList;
 }
 
-void Operations::agg_pro(LList<double>& t){
+inline void Operations::agg_pro(LList<double>& list){
     LList<double> newList;
-    double element = t.agg_product();
+    double element = list.agg_product();
     newList.push_back(element);
+    list = newList;
 }
 
-void Operations::agg_avg(LList<double>& t){
+inline void Operations::agg_avg(LList<double>& list){
     LList<double> newList;
-    double element = t.agg_average();
+    double element = list.agg_average();
     newList.push_back(element);
+    list = newList;
 }
 
-void Operations::agg_fst(LList<double>& t){
+inline void Operations::agg_fst(LList<double>& list){
     LList<double> newList;
-    double element = t.agg_first();
+    double element = list.agg_first();
     newList.push_back(element);
+    list = newList;
 }
 
-void Operations::agg_lst(LList<double>& t){
+inline void Operations::agg_lst(LList<double>& list){
     LList<double> newList;
-    double element = t.agg_last();
+    double element = list.agg_last();
     newList.push_back(element);
+    list = newList;
 }
 
 //SRT
-void Operations::srt_rev(LList<double>& t){
-    t.reverse();
+inline void Operations::srt_rev(LList<double>& list){
+    list.reverse();
 }
 
-void Operations::srt_ord(LList<double>& t, std::string s){
-
+inline void Operations::srt_ord(LList<double>& list, const std::string ordered){
+    list.srt_ord(ordered);
 }
 
-void Operations::srt_slc(LList<double>& t, int index){
-    t.srt_slc(index);
+inline void Operations::srt_slc(LList<double>& list, int index){
+    list.srt_slc(index);
 }
 
-void Operations::srt_dst(LList<double>& t){
-    t.remove_duplicates();
+inline void Operations::srt_dst(LList<double>& list){
+    list.remove_duplicates();
 }

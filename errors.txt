@@ -1,2 +1,9 @@
-Tue Jan 10 21:21:44 2023
+----------Errors-----------
+Sun Jan 15 14:26:45 2023
 Errors history
+Sun Jan 15 14:26:45 2023
+Invalid parameter!
+-2mk
+Sun Jan 15 14:26:45 2023
+Invalid parameter!
+10k

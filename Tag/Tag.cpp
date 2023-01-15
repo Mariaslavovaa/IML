@@ -1,34 +1,34 @@
 #include "Tag.h"
 #pragma once 
 
-std::string Tag::getOpenTag() const {
+inline std::string Tag::getOpenTag() const {
     return openTag;
 }
 
-std::string Tag::getParameter() const {
+inline std::string Tag::getParameter() const {
     return parameter;
 }
 
-std::string Tag::getCloseTag() const {
+inline std::string Tag::getCloseTag() const {
     return closeTag;
 }
 
-std::string Tag::getData() const {
+inline std::string Tag::getData() const {
     return data;
 }
 
-void Tag::setOpenTag(std::string openTag){
+inline void Tag::setOpenTag(const std::string openTag){
     this->openTag = openTag;
 }
 
-void Tag::setParameter(std::string parameter){
+inline void Tag::setParameter(const std::string parameter){
     this->parameter = parameter;
 }
 
-void Tag::setCloseTag(std::string closeTag){
+inline void Tag::setCloseTag(const std::string closeTag){
     this->closeTag = closeTag;
 }
 
-void Tag::setData(std::string data){
+inline void Tag::setData(const std::string data){
     this->data = data;
 }

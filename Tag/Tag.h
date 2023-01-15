@@ -11,13 +11,13 @@ class Tag{
 
     public:
     Tag() = default;
-    std::string getOpenTag() const;
-    std::string getParameter() const;
-    std::string getCloseTag() const;
-    std::string getData() const;
+    inline std::string getOpenTag() const;
+    inline std::string getParameter() const;
+    inline std::string getCloseTag() const;
+    inline std::string getData() const;
     
-    void setOpenTag(std::string openTag);
-    void setParameter(std::string parameter);
-    void setCloseTag(std::string closeTag);
-    void setData(std::string data);
+    inline void setOpenTag(const std::string openTag);
+    inline void setParameter(const std::string parameter);
+    inline void setCloseTag(const std::string closeTag);
+    inline void setData(const std::string data);
 };

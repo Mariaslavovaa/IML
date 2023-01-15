@@ -3,20 +3,20 @@
 #include "..\Operations\Operations.cpp"
 #include <fstream>
 
-LList<double> Evaluator::convertToList(std::string s){
+inline LList<double> Evaluator::convertToList(std::string str){
 
     std::string temp;
     LList<double> list;
-    for (size_t i = 0; s[i] != '\0'; i++)
+    for (size_t i = 0; str[i] != '\0'; i++)
     {
-        if (s[i] == ' ')
+        if (str[i] == ' ')
         {
             double number = std::stod(temp);
             list.push_back(number);
             temp = "";
             continue;
         }
-        temp += s[i];
+        temp += str[i];
     }
     if(temp != ""){
         double number = std::stod(temp);
@@ -25,53 +25,63 @@ LList<double> Evaluator::convertToList(std::string s){
     return list;
 }
 
-//or stringConvertToDouble?
-double Evaluator::convertToDouble(std::string s){
-    double number = std::stod(s);
+inline double Evaluator::convertToDouble(std::string str){
+    try
+    {
+        return std::stod(str);
+    }
+    catch(const std::exception& e)
+    {
+        std::ofstream out;
+        out.open("../errors.txt");
+        out << e.what() << str << std::endl;
+        out.close();
+    }
+}
+
+inline int Evaluator::convertToInt(std::string str){
+    int number = std::stoi(str);
     return number;
 }
 
-int Evaluator::convertToInt(std::string s){
-    int number = std::stoi(s);
-    return number;
-}
-
-LList<double> Evaluator::evaluate_expression(Tag t){
-    LList<double> l = convertToList(t.getData());
-    std::string operation = t.getOpenTag();
-    std::ofstream output("result.txt");
+inline LList<double> Evaluator::evaluate_expression(Tag tag){
+    LList<double> list = convertToList(tag.getData());
+    std::string operation = tag.getOpenTag();
     Operations oper;
 
     if (operation == "MAP-INC") {
-        double number = convertToDouble(t.getParameter());
-        oper.map_inc(l, number);
+        if(tag.getParameter().size() > 0){
+            double number = convertToDouble(tag.getParameter());
+            oper.map_inc(list, number);
+        }
     } else if(operation == "MAP-MLT") {
-        double number = convertToDouble(t.getParameter());
-        oper.map_mlt(l, number);
+        if(tag.getParameter().size() > 0){
+            double number = convertToDouble(tag.getParameter());
+            oper.map_mlt(list, number);
+        }
     } else if(operation == "AGG-SUM") {
-        oper.agg_sum(l);
+        oper.agg_sum(list);
     } else if(operation == "AGG-PRO") {
-        oper.agg_pro(l);
+        oper.agg_pro(list);
     } else if(operation == "AGG-AVG" ) {
-        oper.agg_avg(l);
+        oper.agg_avg(list);
     } else if(operation == "AGG-FST") {
-        oper.agg_fst(l);
+        oper.agg_fst(list);
     } else if(operation == "AGG-LST") {
-        oper.agg_lst(l);
+        oper.agg_lst(list);
     } else if(operation == "SRT-REV") {
-        oper.srt_rev(l);
+        oper.srt_rev(list);
     } else if(operation == "SRT-ORD") {
-        std::string param = t.getParameter();
-        oper.srt_ord(l, param);
+        std::string param = tag.getParameter();
+        oper.srt_ord(list, param);
     } else if(operation == "SRT-SLC") {
-        int index = convertToInt(t.getParameter());
-        oper.srt_slc(l, index);
+        int index = convertToInt(tag.getParameter());
+        oper.srt_slc(list, index);
     } else if(operation == "SRT-DST") {
-        oper.srt_dst(l);
+        oper.srt_dst(list);
     } 
-    output << "----------RESULT-----------\n";
-    l.printFile(output);
-    return l;
+
+    return list;
 }
 
 // int main(){

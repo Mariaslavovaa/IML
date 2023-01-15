@@ -6,13 +6,12 @@
 
 class Evaluator{
     public:
-    //converting 
-    LList<double> convertToList(std::string s);
-    double convertToDouble(std::string s);
-    int convertToInt(std::string s);
+    //converting string
+    inline LList<double> convertToList(std::string str);
+    inline double convertToDouble(std::string str);
+    inline int convertToInt(std::string str);
 
     public:
-    //Не знам как да я кръстя и какво да върна
-    LList<double> evaluate_expression(Tag t);
+    inline LList<double> evaluate_expression(Tag tag);
 
 };

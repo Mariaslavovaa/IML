@@ -1,4 +1,5 @@
 #include <iostream>
+#pragma once
 
 template<typename T>
 class LList{
@@ -14,26 +15,28 @@ class LList{
         }
     };
     
-
     Node* first;
 
     void copy(const LList<T>& other);
     void erase();
+    Node* middle_point(LList<T> first);
+    Node* merge(Node* a, Node* b);
 
     public:
 
-    LList();
-    LList(const LList<T>& other);
-    LList<T>& operator=(const LList<T>& other);
-    ~LList();
+    inline LList();
+    inline LList(const LList<T>& other);
+    inline LList(Node* first);
+    inline LList<T>& operator=(const LList<T>& other);
+    inline ~LList();
 
-    Node* getFirst() const;
+    inline Node* getFirst() const;
 
-    void push_back(const T& elem);
-    void push_front(const T& data);
+    inline void push_back(const T& elem);
+    inline void push_front(const T& data);
 
-    inline void map_increment(double n);
-    inline void map_multiple(double n);
+    inline void map_increment(const double& number);
+    inline void map_multiple(const double& number);
 
     inline double agg_summation();
     inline double agg_product();
@@ -43,14 +46,27 @@ class LList{
 
     inline void reverse();
     //sort??? heap/merge????
+    Node* merge_sort(Node* head);
+    inline void srt_ord(const std::string ord);
 
-
-    //slice срязва  Ако индекса е по-голям от броя елементи?? в този случай какво се случва
     inline void srt_slc(int index);
-
-    //dst // ДА ГО ОПРАВЯ АКО МОГА
     inline void remove_duplicates();
 
     inline void print();
     inline void printFile(std::ofstream& out);
+
+    class Iterator
+    {
+        private:
+        Node* current;
+        
+        public:
+        Iterator(Node* first);
+        bool operator!=(const Iterator& it);
+        Iterator& operator++();
+        T& operator*();       
+    };
+
+    Iterator begin();
+    Iterator end();
 };
