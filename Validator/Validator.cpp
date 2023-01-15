@@ -6,30 +6,6 @@
 #pragma once
 
 
-inline bool Validator::rightBrackets(const std::string& expression) {
-    std::stack<char> brackets;
-
-    if(std::count(expression.begin(), expression.end(), '<') != 1 &&
-       std::count(expression.begin(), expression.end(), '>') != 1){
-            return false;
-    }
-    for(int i = 0; i < expression.size(); i++) {
-        if(expression[i] == '<') {
-            brackets.push(expression[i]);
-        }
-        else {
-            if(expression[i] == '>') {
-                if(brackets.top() == '<') {
-                    brackets.pop();
-                } else {
-                    return false;
-                }
-            }
-        }
-    }
-    return brackets.empty();
-}
-
 inline bool Validator::checkOperation(const std::string& operation){
     if (operation == "MAP-INC") {
         return true;
@@ -58,7 +34,6 @@ inline bool Validator::checkOperation(const std::string& operation){
     }
 }
 
-// extract into external private method extractOpenTagOperation, extractCloseTagOperation
 inline std::string Validator::extractOpenTagOperation(std::string& openTag){
 
     std::string openTagOperation = openTag.erase(openTag.find('<'), openTag.find('<'));
@@ -81,14 +56,14 @@ inline bool Validator::validateCloseTag(const std::string& closeTag, const std::
     return this->checkOperation(openTag) && this->checkOperation(closeTag) && closeTag == openTag;
 }
 
-inline bool Validator::validateParameter(const std::string& parameter){  //-2.2
+inline bool Validator::validateParameter(const std::string& parameter){  
     if (parameter == "ASC" || parameter == "DSC")
     {
         return true;
     }
 
     size_t count = 0;
-    for (size_t i = 0; i < parameter.size(); i++){  /// -12.5
+    for (size_t i = 0; i < parameter.size(); i++){ 
         if(parameter[i] == '.'){
             count++;
         }
@@ -135,19 +110,3 @@ inline bool Validator::operRequiresParam(const std::string& operation){
         return false;
     }
 }
-
-
-
-
-// int main(){
-
-//     Validator val;
-//     // std::cout << std::boolalpha << val.validateOpenTag("MAP-MLT ") << std::endl;
-//     // std::cout << std::boolalpha << val.validateParameter("2") << std::endl;
-//     // std::cout << val.removeSpaces("1 2 3") << std::endl;
-//     // std::string s = val.removeSpaces("1 2 3");
-//     std::cout << std::boolalpha << val.validateParameter("1300008") << std::endl;
-
-
-//     return 0;
-// }

@@ -2,7 +2,6 @@
 #pragma once
 #include <algorithm>
 
-
 template<typename T>
 void LList<T>::copy(const LList<T>& other){
 
@@ -29,48 +28,16 @@ void LList<T>::erase(){
     }
 }
 
-template<typename T>
-typename LList<T>::Node* LList<T>::middle_point(LList<T> first){
-    // base case
-    if(first.getFirst() == nullptr || first.getFirst()->next == nullptr) {
-        return first.getFirst();
+template <typename T>
+inline unsigned  LList<T>::size(){
+    Node* tmp = this->first;
+    unsigned counter = 0; 
+    while (tmp)
+    {
+        counter++;
+        tmp = tmp->next;
     }
-    // recursive case
-    Node* fast = first.getFirst();
-    Node* slow = first.getFirst();
- 
-    while(fast != nullptr && fast->next != nullptr) {
-        fast = fast->next;
- 
-        if(fast->next == NULL)
-            break;
- 
-        fast = fast->next;
-        slow = slow->next;
-    } 
-    return slow;
-}
-
-template<typename T>
-typename LList<T>::Node* LList<T>::merge(Node* a, Node* b)
-{
-    if(a == nullptr){
-        return b;
-    }
-    if(b == nullptr){
-        return a;
-    }
-
-    Node *c;
-    if(a->data < b->data){
-        c = a;
-        c->next = merge(a->next, b);
-    }
-    else {
-        c = b;
-        c->next = merge(a, b->next);
-    }
-    return c;
+    return counter;
 }
 
 template<typename T>
@@ -100,6 +67,25 @@ inline LList<T>& LList<T>::operator=(const LList<T>& other){
 template<typename T>
 inline LList<T>::~LList(){
     erase();
+}
+
+template <typename T>
+inline bool LList<T>::operator==(LList<T> other){
+    if (this->size() != other.size())
+    {
+        return false;
+    }
+    
+    Node* tmp = this->first, *sndTmp = other.getFirst();
+    while (tmp && sndTmp)
+    {
+        if(tmp->data != sndTmp->data){
+            return false;
+        }
+        tmp = tmp->next;
+        sndTmp = sndTmp->next;
+    }
+    return true;
 }
 
 template <typename T>
@@ -235,87 +221,83 @@ inline void LList<T>::reverse() {
     first = prev;
 }
 
+/*
 template <typename T>
-typename LList<T>::Node* LList<T>::merge_sort(Node* head)
-{
-    // Node* 
-    head = first;
-    // base case
-    if(head == nullptr || head->next == nullptr)
-        return head;
- 
-    // recursive case
-    // Step 1: divide the linked list into
-    // two equal linked lists
-    Node *mid = middle_point(head);
-    Node *a = head;
-    Node *b = mid->next;
- 
-    mid->next = nullptr;
- 
-    // Step 2: recursively sort the smaller
-    // linked lists
-    a = merge_sort(a);
-    b = merge_sort(b);
- 
-    // Step 3: merge the sorted linked lists
-    Node *c = merge(a, b);
-    
-    return c;
-}
-template <typename T>
-inline unsigned  LList<T>::size(){
-    Node* tmp = this->first;
-    unsigned counter = 0; 
-    while (tmp)
-    {
-        counter++;
-        tmp = tmp->next;
-    }
-    return counter;
-}
-template <typename T>
-inline bool LList<T>::operator==(LList<T> other){
-    if (this->size() != other.size())
-    {
-        return false;
-    }
-    
-    Node* tmp = this->first, *sndTmp = other.getFirst();
-    while (tmp && sndTmp)
-    {
-        if(tmp->data != sndTmp->data){
-            return false;
+inline void LList<T>::split(LList<T>& list, LList<T>& list1, LList<T>& list2) {
+        LList<T>* first = &list1;
+        LList<T>* second = &list2;
+        typename LList<T>::Iterator iterator = list.begin();
+        while (iterator != nullptr) {
+            (*first).push_back(*iterator);
+            std::swap(first, second);
+
+            iterator.operator++();
         }
-        tmp = tmp->next;
-        sndTmp = sndTmp->next;
-    }
-    return true;
-    
 }
 
-//sort??? heap/merge????
+template <typename T>
+inline LList<T> LList<T>::merge(LList<T>& list1, LList<T>& list2) {
+        LList<T> sorted;
+        typename LList<T>::Iterator iterator1 = list1.begin(), iterator2 = list2.begin();
+
+        while (iterator1!=nullptr && iterator2!=nullptr) {
+            if (*iterator1 <= *iterator2) {
+                sorted.push_back(*iterator1);
+                iterator1.operator++();
+            }
+            else {
+                sorted.push_back(*iterator2);
+                iterator2.operator++();
+            }
+        }
+
+        while (iterator1 != nullptr) {
+            sorted.push_back(*iterator1);
+            iterator1.operator++();
+        }
+        while (iterator2 != nullptr) {
+            sorted.push_back(*iterator2);
+            iterator2.operator++();
+        }
+        return sorted;
+}
+
+template <typename T>
+inline void LList<T>::merge_Sort(LList<T>& list) {
+        if (!(list.begin() != list.end()))
+            return;
+
+        LList<T> list1, list2;
+        split(list, list1, list2);
+
+        merge_Sort(list1);
+        merge_Sort(list2);
+
+        list = merge(list1, list2);
+}*/
+
 template <typename T>
 inline void LList<T>::srt_ord(const std::string ord){
-    // Node* result = merge_sort(first);
-    // for (Node* i = first; i; i = i->next)
-    // {
-    //     for (Node* j = first; j != nullptr; j = j->next)
-    //     {
-    //         if (j && i->data >= j->data)
-    //         {
-    //             std::swap(i->data, j->data);
-    //         }
-    //     }
-    // }
-    // std::sort(this->begin(), this->end(), [](T a, T b){
-    //     return  a < b; 
-    // });
+    if(ord == "ASC"){
+        for (Node* i = first; i; i = i->next) {
+            for (Node* j = first; j != nullptr; j = j->next) {
+                if (j && i->data < j->data) {
+                    std::swap(i->data, j->data);
+                }
+            }
+        }
+    } else {
+        for (Node* i = first; i; i = i->next) {
+            for (Node* j = first; j != nullptr; j = j->next) {
+                if (j && i->data >= j->data) {
+                    std::swap(i->data, j->data);
+                }
+            }
+        }
+    }
 
 }
 
-
-//slice срязва  Ако индекса е по-голям от броя елементи?? в този случай какво се случва
 template<typename T>
 inline void LList<T>::srt_slc(int index){
     if(first == nullptr || index < 0){
@@ -417,54 +399,3 @@ typename LList<T>::Iterator& LList<T>::Iterator::operator++()
     current = current->next;
     return *this;
 }
-
-
-// int main(){
-
-//     LList<double> list;
-//     list.push_back(1);   
-//     list.push_back(8);   
-//     list.push_back(2);   
-//     list.push_back(4);   
-//     list.push_back(5);
-//     list.push_back(3);
-//     list.push_back(0);
-    
-//     list.reverse();
-    
-//     std::cout << "majka ti prosta\n";
-
-//     LList<double> list2;
-//     list2.push_back(1);   
-//     list2.push_back(8);   
-//     list2.push_back(2);   
-//     list2.push_back(4);   
-//     list2.push_back(5);
-//     list2.push_back(3);
-//     list2.push_back(0);
-//     list2.reverse();
-//     std::cout << "majka ti tupa\n";
-
-//     std::cout << "kuche na islqma" << std::endl;
-//     std::cout << (list == list2) << std::endl;
-
-
-//     // LList<double> merge(list.merge_sort(list.getFirst()));
-//     // merge.print();
-
-//     //list.srt_ord("ASC");
-//     //list.print();
-
-//     // list.remove_duplicates();
-//     // list.srt_slc(2);
-
-
-//     // std::string op = "abab";
-//     // op.erase(op.find('b'), op.find('b'));
-//     // std::cout << op;
-
-//     // std::cout << list.agg_first() << "  ";
-//     // list.map_multiple(2);
-//     // std::cout << list.agg_last();   
-//     // std::cout << list.agg_last();   
-// }

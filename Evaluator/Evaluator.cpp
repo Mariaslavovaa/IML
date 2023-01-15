@@ -40,8 +40,17 @@ inline double Evaluator::convertToDouble(std::string str){
 }
 
 inline int Evaluator::convertToInt(std::string str){
-    int number = std::stoi(str);
-    return number;
+    try
+    {
+        return std::stoi(str);
+    }
+    catch(const std::exception& e)
+    {
+        std::ofstream out;
+        out.open("../errors.txt");
+        out << e.what() << str << std::endl;
+        out.close();
+    }
 }
 
 inline LList<double> Evaluator::evaluate_expression(Tag tag){
@@ -84,18 +93,3 @@ inline LList<double> Evaluator::evaluate_expression(Tag tag){
     return list;
 }
 
-// int main(){
-
-//     Evaluator e;
-//     std::string num = "123";
-//     Tag t;
-//     t.setCloseTag("MAP-INC");
-//     t.setOpenTag("MAP-INC");
-//     t.setData("1 2 3");
-//     t.setParameter("1");
-//     e.evaluate_expression(t).print();
-//     int result = e.convertToInt(num);
-//     //std::cout << result << "\n";
-
-//     return 0;
-// }

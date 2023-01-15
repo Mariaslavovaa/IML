@@ -8,9 +8,7 @@
 #include "..\Evaluator\Evaluator.cpp"
 #include "../Constants/Constants.cpp"
 
-//here you read and parse the file string 
-
-inline std::string Parser::extractParam(const std::string expr, const std::string startElem, const char end){
+inline std::string Parser::extractParam(const std::string expr, const std::string startElem, const char endElem){
 
     unsigned start = expr.find(startElem);
     if (start > expr.size())
@@ -19,7 +17,7 @@ inline std::string Parser::extractParam(const std::string expr, const std::strin
     }
     ++start;
     std::string res;
-    while (expr[start] != end)
+    while (expr[start] != endElem)
     {
         res += expr[start];
         start++;
@@ -50,10 +48,10 @@ inline void Parser::logError(std::string errorMsg){
     errorLogger.close();
 }
 
-inline std::vector<Tag> Parser::parseTagFromFile(const char* file) 
+inline std::vector<Tag> Parser::parseTagFromFile(const char* fileName) 
 {   
     Constants c;
-    std::ifstream in(file);
+    std::ifstream in(fileName);
     std::string myString;
     std::vector<Tag> result;
     
@@ -63,6 +61,7 @@ inline std::vector<Tag> Parser::parseTagFromFile(const char* file)
             std::getline(in, myString);
             Validator valid;
             std::string parameter = "";
+            
             if(hasParameter(myString)){
                 parameter = extractParam(myString, "\"", '"');
                 unsigned pos = myString.find(parameter);
@@ -70,6 +69,7 @@ inline std::vector<Tag> Parser::parseTagFromFile(const char* file)
                 myString.erase(std::remove(myString.begin(), myString.end(), '"'), myString.end());
             }
 
+            //open tag
             std::string openTag = extractParam(myString, "<", '>');
             openTag.erase(std::remove(openTag.begin(), openTag.end(), ' '), openTag.end());
             if(valid.validateOpenTag(openTag)){
@@ -99,6 +99,7 @@ inline std::vector<Tag> Parser::parseTagFromFile(const char* file)
                 }
             }
 
+            //close tag
             std::string closeTag = extractParam(myString, "</", '>');
             closeTag.erase(std::remove(closeTag.begin(), closeTag.end(), '/'), closeTag.end());
             if(valid.validateCloseTag(closeTag, openTag)){
@@ -108,6 +109,7 @@ inline std::vector<Tag> Parser::parseTagFromFile(const char* file)
                 continue;
             }
 
+            //data
             std::string data = extractParam(myString, ">", '<');
             if(data.size() > 0){
                 if(valid.validateData(data)){
@@ -127,9 +129,9 @@ inline std::vector<Tag> Parser::parseTagFromFile(const char* file)
     return result;
 }
 
-inline void Parser::writeIntoFile(const char* _fileName, LList<double> list){
+inline void Parser::writeIntoFile(const char* fileName, LList<double> list){
     std::ofstream out;
-    out.open(_fileName,std::ios_base::app);
+    out.open(fileName,std::ios_base::app);
     if(!out){
         out.close();
         out.open("errors.txt", std::ios::app);
@@ -140,16 +142,3 @@ inline void Parser::writeIntoFile(const char* _fileName, LList<double> list){
     out << "\n";
     out.close();
 }
-
-
-
-// int main(){
-//     Parser p;
-    
-//     std::cout << p.parseTagFromFile("../example_input.txt").getOpenTag();
-
-//     // std::ofstream out;
-//     // p.writeIntoFile("../example_output.txt", out);
-
-//     return 0;
-// }
